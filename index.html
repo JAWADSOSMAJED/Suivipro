@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Gestion de chantier BTP : avancement, planning, devis, bons de commande, stock, sous-traitants, décomptes et documentation.">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ChantierPro">
+  <title>ChantierPro — Gestion de chantier BTP</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b1220'/%3E%3Cpath d='M7 23V13l9-5 9 5v10' fill='none' stroke='%23f59e0b' stroke-width='2.4' stroke-linejoin='round'/%3E%3Cpath d='M13 23v-6h6v6' fill='none' stroke='%23f59e0b' stroke-width='2.4'/%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/icon.svg">
+  <link rel="stylesheet" href="assets/styles.css?v=1.4.6">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#/dashboard">
+        <span class="brand-logo">
+          <svg width="24" height="24" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 25V13l11-7 11 7v12" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M12 25v-8h8v8" stroke="currentColor" stroke-width="2.4"/></svg>
+        </span>
+        <span class="brand-txt"><b>ChantierPro</b><small>Gestion BTP</small></span>
+      </a>
+      <button class="icon-btn sidebar-close" id="navClose" type="button" title="Fermer le menu" aria-label="Fermer le menu">&times;</button>
+      <nav id="nav" class="nav"></nav>
+      <div class="sidebar-foot">
+        <span id="storageFoot">—</span>
+        <a href="#/parametres">Sauvegarde &amp; paramètres</a>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-toggle" id="menuToggle" type="button" title="Menu" aria-label="Ouvrir le menu" aria-controls="sidebar" aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/></svg>
+        </button>
+        <div class="topbar-title">
+          <h1 id="pageTitle">Tableau de bord</h1>
+          <p id="pageSub">Vue d'ensemble</p>
+        </div>
+        <div class="topbar-actions">
+          <label class="filter-select" title="Filtrer par chantier">
+            <span>Chantier</span>
+            <select id="chantierFilter" class="input"></select>
+          </label>
+          <button class="btn ghost" id="btnExport" type="button" title="Exporter une sauvegarde JSON">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+            <span class="hide-sm">Exporter</span>
+          </button>
+          <button class="btn primary" id="btnQuick" type="button" aria-label="Nouveau">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            <span>Nouveau</span>
+          </button>
+        </div>
+      </header>
+      <main id="view" class="view" aria-live="polite"></main>
+    </div>
+  </div>
+
+  <div id="modalRoot"></div>
+  <div id="toastRoot" class="toast-root"></div>
+
+  <script src="js/core.js?v=1.4.6"></script>
+  <script src="js/db.js?v=1.4.6"></script>
+  <script src="js/security.js?v=1.4.6"></script>
+  <script src="js/list.js?v=1.4.6"></script>
+  <script src="js/docs-print.js?v=1.4.6"></script>
+  <script src="js/views-main.js?v=1.4.6"></script>
+  <script src="js/views-planning.js?v=1.4.6"></script>
+  <script src="js/views-business.js?v=1.4.6"></script>
+  <script src="js/views-devis.js?v=1.4.6"></script>
+  <script src="js/views-st.js?v=1.4.6"></script>
+  <script src="js/views-qualite.js?v=1.4.6"></script>
+  <script src="js/boot.js?v=1.4.6"></script>
+</body>
+</html>
