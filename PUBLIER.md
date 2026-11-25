@@ -1,4 +1,4 @@
-# Publier ChantierPro sur Internet
+# Publier JawadProjet sur Internet
 
 > ## SITE EN LIGNE (deploiement anonyme Netlify)
 >
@@ -6,11 +6,11 @@
 > - Mot de passe provisoire : `My-Drop-Site`
 > - Deploye le 16/11/2026 a 13:30 UTC - `site_id` `59f1128c-f570-4eb8-97c3-1f2a4fbf813b`
 > - **Site hors ligne** : l'adresse ci-dessus renvoie une erreur **503** (deploiement anonyme
->   supprime). Le ZIP du Bureau est en **1.4.6** : connexion par nom d'utilisateur et mot de
+>   supprime). Le ZIP du Bureau est en **1.4.7** : connexion par nom d'utilisateur et mot de
 >   passe, impression sur tous les onglets, sous-onglets *Stock & fournitures* par famille de
 >   materiaux, **bon de livraison et date de livraison** sur chaque article et chaque entree de stock, fiche chantier
 >   avec tranche, GH, nombre d'immeubles, type d'immeuble, appartements et magasins, rapport
->   recapitulatif des essais beton, remise a zero des donnees saisies, suppression des derniers mouvements du tableau de bord, planning separe par tranche. Republier sur un nouveau projet (Cloudflare Pages
+>   recapitulatif des essais beton, remise a zero des donnees saisies, suppression des derniers mouvements du tableau de bord, planning separe par tranche, raison sociale SOSMAJED (Lot N°31, Lotissement Kamilia, 20000 Casablanca, contact@sosmajed.com). Republier sur un nouveau projet (Cloudflare Pages
 >   conseille, voir Option 1).
 > - **A reclamer avant 14:30 UTC (15:30 heure locale)**, sinon Netlify supprime le site.
 > - Lien de reclamation (usage unique) :
@@ -30,7 +30,7 @@
 > `C:\Users\SOSMAJED\AppData\Local\Temp\opencode\deploy_netlify.py`.
 
 
-ChantierPro est un site **100 % statique** (HTML/CSS/JS) : aucun serveur, aucune base de
+JawadProjet est un site **100 % statique** (HTML/CSS/JS) : aucun serveur, aucune base de
 données, aucune installation. N'importe quel hébergement de fichiers statiques fonctionne.
 
 > **À lire avant de publier**
@@ -52,7 +52,7 @@ aucune carte bancaire demandée.
    **Upload assets** (envoi direct, sans GitHub).
 3. Donnez un nom au projet (ex. `chantierpro`) → **Create project**.
 4. Glissez le **dossier** `GestionChantierWeb` (ou le `.zip`
-   `ChantierPro-site-web.zip` du Bureau) dans la zone d'envoi.
+   `JawadProjet-site-web.zip` du Bureau) dans la zone d'envoi.
 5. Cliquez sur **Deploy site**.
 6. Le site est en ligne sur `https://chantierpro.pages.dev` (le nom choisi).
 
@@ -80,7 +80,7 @@ Le fichier `.nojekyll` fourni évite que GitHub transforme le site. Mise à jour
 
 ## Option 3 — Netlify Drop (gratuit)
 
-1. Utilisez le fichier `ChantierPro-site-web.zip` fourni sur le Bureau.
+1. Utilisez le fichier `JawadProjet-site-web.zip` fourni sur le Bureau.
 2. Ouvrez <https://app.netlify.com/drop> et glissez le `.zip` (pas le dossier parent).
 3. Vous obtenez une adresse du type `https://mon-chantier.netlify.app`.
 

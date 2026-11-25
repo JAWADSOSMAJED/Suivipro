@@ -1,20 +1,20 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-title ChantierPro - serveur local
+title JawadProjet - serveur local
 
 where python >nul 2>nul
 if errorlevel 1 goto nopython
 
 echo.
-echo  ChantierPro - demarrage du serveur local
+echo  JawadProjet - demarrage du serveur local
 echo  Adresse : http://localhost:8765
 echo.
 echo  Laissez cette fenetre ouverte pendant l'utilisation du site.
 echo  Fermez-la pour arreter le serveur.
 echo.
 
-start "ChantierPro - serveur" /min cmd /c "python -m http.server 8765 --bind 127.0.0.1"
+start "JawadProjet - serveur" /min cmd /c "python -m http.server 8765 --bind 127.0.0.1"
 timeout /t 2 /nobreak >nul
 start "" "http://localhost:8765/"
 echo  Le site est ouvert dans votre navigateur.

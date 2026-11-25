@@ -1,5 +1,5 @@
 /* =========================================================
-   ChantierPro — qualité : essais béton (7 et 28 jours)
+   ChantierPro — SOSMAJED — qualité : essais béton (7 et 28 jours)
    ========================================================= */
 (function () {
   'use strict';

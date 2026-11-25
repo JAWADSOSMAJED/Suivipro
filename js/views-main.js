@@ -1,5 +1,5 @@
 /* =========================================================
-   ChantierPro — tableau de bord, chantiers, fiche chantier
+   ChantierPro — SOSMAJED — tableau de bord, chantiers, fiche chantier
    ========================================================= */
 (function () {
   'use strict';

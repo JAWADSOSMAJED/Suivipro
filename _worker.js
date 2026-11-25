@@ -45,7 +45,7 @@ function unauthorized() {
   return new Response('Acc\u00e8s prot\u00e9g\u00e9 par nom d\u2019utilisateur et mot de passe.', {
     status: 401,
     headers: {
-      'WWW-Authenticate': 'Basic realm="ChantierPro", charset="UTF-8"',
+      'WWW-Authenticate': 'Basic realm="JawadProjet", charset="UTF-8"',
       'Content-Type': 'text/plain; charset=utf-8',
       'Cache-Control': 'no-store'
     }

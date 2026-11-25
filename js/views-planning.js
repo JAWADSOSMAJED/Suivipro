@@ -1,5 +1,5 @@
 /* =========================================================
-   ChantierPro — planning (Gantt) et avancement
+   ChantierPro — SOSMAJED — planning (Gantt) et avancement
    ========================================================= */
 (function () {
   'use strict';

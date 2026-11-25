@@ -1,4 +1,4 @@
-# ChantierPro — Gestion de chantier BTP
+# ChantierPro — Gestion de chantier BTP — SOSMAJED
 
 Application web autonome (HTML/CSS/JavaScript) pour piloter un chantier au quotidien :
 avancement, planning, personnel, fournisseurs, stock, devis, bons de commande,
@@ -8,7 +8,7 @@ Toutes les données sont enregistrées **dans le navigateur** (localStorage). Au
 aucune base de données et aucune installation ne sont nécessaires. Une sauvegarde JSON
 permet d'archiver ou de transférer les données vers un autre poste.
 
-À la première ouverture, l'application démarre **vide** : vous saisissez uniquement vos
+La raison sociale est **SOSMAJED**, l'adresse par défaut est **Lot N°31, Lotissement Kamilia, 20000 Casablanca** et l'e-mail est **contact@sosmajed.com** ; ces informations apparaissent sur les documents imprimés et sont modifiables dans *Paramètres*. Une **bannière modifiable** s'affiche en tête de page : texte, affichage/masquage et image de fond sont réglés dans *Paramètres → Bannière en tête de page*. À la première ouverture, l'application démarre **vide** : vous saisissez uniquement vos
 propres chantiers et données. Pour découvrir un jeu d'exemple, ouvrez *Paramètres →
 Recharger la démonstration* (ou ajoutez `?demo=1` à l'adresse du site).
 
@@ -26,7 +26,7 @@ Double-cliquez sur **`Ouvrir le site.bat`** : un petit serveur local démarre su
 et la page s'ouvre à l'adresse <http://localhost:8765>.
 
 > Le fichier `.bat` utilise Python s'il est installé. Sinon, il ouvre directement `index.html`.
-> Pour arrêter le serveur, fermez la fenêtre de commande minimisée « ChantierPro ».
+> Pour arrêter le serveur, fermez la fenêtre de commande minimisée « JawadProjet ».
 
 Vous pouvez aussi lancer manuellement, depuis le dossier du site :
 
@@ -152,7 +152,7 @@ les données du navigateur.
 ## Sauvegarde et restauration
 
 - **Exporter** : bouton *Exporter* de la barre supérieure, ou *Paramètres → Exporter une sauvegarde JSON*.
-  Un fichier `chantierpro-sauvegarde-AAAA-MM-JJ.json` est téléchargé.
+  Un fichier `jawadprojet-sauvegarde-AAAA-MM-JJ.json` est téléchargé.
 - **Importer** : *Paramètres → Importer une sauvegarde*, puis choisissez le fichier JSON.
   Les données actuelles sont remplacées.
 - **Recharger la démonstration** : remet le jeu de données d'exemple.
@@ -283,4 +283,20 @@ Compatible avec les navigateurs récents (Chrome, Edge, Firefox).
 
 ---
 
-Version 1.4.6 — ChantierPro · Gestion de chantier BTP
+Version 1.4.7 — ChantierPro · SOSMAJED · Gestion de chantier BTP
+
+
+---
+
+## Application mobile (APK)
+
+Une version Android est disponible : **`JawadProjet.apk`**. Elle embarque
+l'int?gralit? du site : elle fonctionne donc **hors ligne**, sans acc?s ?
+Internet et sans d?pendre du site publi? sur GitHub Pages.
+
+- Copier `JawadProjet.apk` sur le t?l?phone, puis l'ouvrir pour l'installer
+  (autoriser l'installation depuis des sources inconnues).
+- Les donn?es restent dans le t?l?phone et sont conserv?es lors des mises ? jour.
+- Pour reconstruire l'APK apr?s une modification du site :
+  `C:\GestionChantierWeb\android\build_apk.bat`.
+- D?tails : `android/README.md`.

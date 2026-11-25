@@ -1,5 +1,5 @@
 /* =========================================================
-   ChantierPro — démarrage, navigation et barre supérieure
+   ChantierPro — SOSMAJED — démarrage, navigation et barre supérieure
    ========================================================= */
 (function () {
   'use strict';
@@ -65,6 +65,28 @@
   }
   App.applyLogo = applyLogo;
 
+  /* Bannière modifiable affichée en tête de page. */
+  function applyBanner() {
+    const box = $('#topBanner');
+    if (!box) return;
+    const b = App.settings().banniere || {};
+    const texte = String(b.texte || '').trim();
+    const image = b.image && b.image.dataUrl ? String(b.image.dataUrl) : '';
+    if (!b.actif || (!texte && !image)) {
+      box.hidden = true;
+      box.textContent = '';
+      box.style.backgroundImage = '';
+      return;
+    }
+    box.hidden = false;
+    box.style.backgroundImage = image
+      ? 'linear-gradient(90deg, rgba(11,18,32,.94), rgba(11,18,32,.74)), url("' + image.replace(/"/g, '%22') + '")'
+      : '';
+    box.innerHTML = '<div class="top-banner-inner"><span class="top-banner-mark"></span>' +
+      '<span>' + (texte ? esc(texte) : '&nbsp;') + '</span></div>';
+  }
+  App.applyBanner = applyBanner;
+
   function renderNav() {    const nav = $('#nav');
     nav.innerHTML = NAV.map(function (g) {
       return '<div class="nav-group"><span class="nav-label">' + esc(g.label) + '</span>' +
@@ -114,7 +136,8 @@
 
     $('#pageTitle').textContent = title;
     $('#pageSub').textContent = subtitle;
-    document.title = 'ChantierPro — ' + title;
+    document.title = 'ChantierPro — SOSMAJED — ' + title;
+    applyBanner();
 
     $$('.nav-item').forEach(function (a) {
       a.classList.toggle('active', a.dataset.route === route || (route === 'chantier' && a.dataset.route === 'chantiers'));

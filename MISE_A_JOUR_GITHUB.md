@@ -58,7 +58,7 @@ README.md, PUBLIER.md, _worker.js, .nojekyll, _redirects
 2. Supprimer le zip du dépôt (optionnel).
 3. Uploader **tous les fichiers dézippés à la racine** via *Add file → Upload files*
    (GitHub recrée les dossiers `assets` et `js`).
-4. Commiter avec un message du type « Déploiement du site ChantierPro ».
+4. Commiter avec un message du type « Déploiement du site JawadProjet ».
 
 ## Vérification après publication
 

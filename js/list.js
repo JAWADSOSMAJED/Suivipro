@@ -1,5 +1,5 @@
 /* =========================================================
-   ChantierPro — listes génériques et formulaires
+   ChantierPro — SOSMAJED — listes génériques et formulaires
    ========================================================= */
 (function () {
   'use strict';

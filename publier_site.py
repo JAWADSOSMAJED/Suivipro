@@ -1,4 +1,4 @@
-"""Publie le site ChantierPro sur le dépôt GitHub Pages.
+"""Publie le site JawadProjet sur le dépôt GitHub Pages.
 
 Aucun Git n'est nécessaire : le script utilise l'API GitHub.
 Il compare les fichiers locaux au dépôt et n'envoie que ceux qui ont changé.
@@ -31,7 +31,8 @@ if len(sys.argv) > 1:
     REPO = sys.argv[1]
     SITE = "https://jawadsosmajed.github.io/" + REPO.split("/")[-1] + "/"
 DOSSIER = pathlib.Path(__file__).resolve().parent
-EXCLUS = {"publier_site.py", "site-a-publier.zip", "MISE_A_JOUR_GITHUB.md"}
+EXCLUS = {"publier_site.py", "site-a-publier.zip", "MISE_A_JOUR_GITHUB.md", "JawadProjet.apk"}
+DOSSIERS_EXCLUS = {"android", "__pycache__", ".git"}
 
 
 def sha_git(donnees):
@@ -70,7 +71,7 @@ def main():
         if not chemin.is_file():
             continue
         relatif = chemin.relative_to(DOSSIER).as_posix()
-        if relatif in EXCLUS or relatif.startswith(".git/"):
+        if relatif in EXCLUS or set(chemin.relative_to(DOSSIER).parts) & DOSSIERS_EXCLUS:
             continue
         fichiers.append((relatif, chemin))
 

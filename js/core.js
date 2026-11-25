@@ -1,12 +1,12 @@
 /* =========================================================
-   ChantierPro — socle : utilitaires et composants d'interface
+   ChantierPro — SOSMAJED — socle : utilitaires et composants d'interface
    Site autonome, données stockées dans le navigateur.
    ========================================================= */
 (function () {
   'use strict';
 
   const App = (window.App = window.App || {});
-  App.version = '1.4.6';
+  App.version = '1.4.7';
   App.entities = {};
   App.views = {};
   App.entity = function (key, def) { App.entities[key] = def; };
@@ -247,6 +247,7 @@
         const lab = el('label', 'check-row');
         const input = el('input');
         input.type = 'checkbox';
+        input.dataset.k = f.k;
         input.checked = !!value;
         lab.append(input, el('span', '', esc(label)));
         wrap.appendChild(lab);

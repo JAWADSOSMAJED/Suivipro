@@ -1,5 +1,5 @@
 /* =========================================================
-   ChantierPro — sous-traitants, situations, paramètres
+   ChantierPro — SOSMAJED — sous-traitants, situations, paramètres
    ========================================================= */
 (function () {
   'use strict';
@@ -290,16 +290,90 @@
       logoBox.append(logoPreview, logoCopy);
       card.appendChild(logoBox);
 
+      /* Bannière affichée en tête de page */
+      if (!s.banniere) s.banniere = { actif: true, texte: 'SOSMAJED — Gestion de chantier BTP', image: null };
+      const bannerBox = el('div', 'banner-settings');
+      const bannerPreview = el('div', 'banner-preview');
+      const bannerCopy = el('div', 'banner-copy');
+      const bannerActions = el('div', 'banner-actions');
+      const bannerFile = el('input');
+      bannerFile.type = 'file';
+      bannerFile.accept = 'image/png,image/jpeg,image/svg+xml,image/webp,image/gif';
+      bannerFile.style.display = 'none';
+      const bannerUploadBtn = el('button', 'btn ghost sm', App.icon('upload') + '<span>Choisir une image</span>');
+      bannerUploadBtn.type = 'button';
+      const bannerRemoveBtn = el('button', 'btn ghost sm', App.icon('trash') + '<span>Retirer l\'image</span>');
+      bannerRemoveBtn.type = 'button';
+      const bannerFF = App.buildFields([
+        { k: 'actif', l: 'Afficher la bannière', type: 'checkbox' },
+        { k: 'texte', l: 'Texte de la bannière', full: true, placeholder: 'Ex. SOSMAJED — Gestion de chantier BTP' }
+      ], s.banniere, {});
+
+      const syncBanner = function () {
+        const vals = bannerFF.read();
+        const img = s.banniere && s.banniere.image && s.banniere.image.dataUrl;
+        bannerPreview.textContent = vals.actif
+          ? (String(vals.texte || '').trim() || 'Bannière active — saisissez un texte')
+          : 'Bannière masquée';
+        bannerPreview.classList.toggle('off', !vals.actif);
+        bannerPreview.style.backgroundImage = img
+          ? 'linear-gradient(90deg, rgba(11,18,32,.94), rgba(11,18,32,.74)), url("' + String(img).replace(/"/g, '%22') + '")'
+          : '';
+        bannerRemoveBtn.style.display = img ? '' : 'none';
+      };
+      syncBanner();
+      bannerFF.el.addEventListener('input', syncBanner);
+      bannerFF.el.addEventListener('change', syncBanner);
+      bannerUploadBtn.onclick = function () { bannerFile.click(); };
+      bannerFile.onchange = function () {
+        const file = bannerFile.files && bannerFile.files[0];
+        if (!file) return;
+        if (!file.type || file.type.indexOf('image/') !== 0) {
+          App.toast('Choisissez une image (PNG, JPG, SVG, WebP).', 'err');
+          bannerFile.value = '';
+          return;
+        }
+        if (file.size > 2097152) {
+          App.toast('Image trop volumineuse (2 Mo maximum).', 'err');
+          bannerFile.value = '';
+          return;
+        }
+        const fr = new FileReader();
+        fr.onload = async function () {
+          if (App.security && !(await App.security.confirmWrite('Changer la bannière de tête de page'))) return;
+          s.banniere.image = { name: file.name, type: file.type, size: file.size, dataUrl: fr.result };
+          App.db.persist();
+          syncBanner();
+          if (App.applyBanner) App.applyBanner();
+          App.toast('Bannière enregistrée.');
+          App.render();
+        };
+        fr.readAsDataURL(file);
+        bannerFile.value = '';
+      };
+      bannerRemoveBtn.onclick = async function () {
+        if (App.security && !(await App.security.confirmWrite('Retirer l\'image de la bannière'))) return;
+        s.banniere.image = null;
+        App.db.persist();
+        syncBanner();
+        if (App.applyBanner) App.applyBanner();
+        App.toast('Image de la bannière retirée.');
+        App.render();
+      };
+      bannerActions.append(bannerUploadBtn, bannerRemoveBtn, bannerFile);
+      bannerCopy.innerHTML = '<h3>Bannière en tête de page</h3><p>Un bandeau s\'affiche au-dessus de la barre d\'outils. Modifiez son texte, masquez-le ou ajoutez une image de fond (PNG, JPG, SVG ou WebP, 2 Mo maximum).</p>';
+      bannerCopy.appendChild(bannerFF.el);
+      bannerCopy.appendChild(bannerActions);
+      bannerBox.append(bannerPreview, bannerCopy);
+      card.appendChild(bannerBox);
+
       const ff = App.buildFields([
         { k: 'nom', l: 'Raison sociale', required: true, full: true },
         { k: 'adresse', l: 'Adresse', full: true },
         { k: 'cp', l: 'Code postal' },
         { k: 'ville', l: 'Ville' },
         { k: 'tel', l: 'Téléphone', type: 'tel' },
-        { k: 'email', l: 'Email', type: 'email' },
-        { k: 'siret', l: 'SIRET' },
-        { k: 'tva', l: 'N° TVA intracommunautaire' },
-        { k: 'iban', l: 'IBAN', full: true }
+        { k: 'email', l: 'Email', type: 'email' }
       ], s.societe, {});
       const defaults = App.buildFields([
         { k: 'tvaDefaut', l: 'TVA par défaut (%)', type: 'percent', min: 0, max: 100 },
@@ -328,7 +402,12 @@
       saveBtn.onclick = async function () {
         if (!ff.validate()) return;
         if (App.security && !(await App.security.confirmWrite('Enregistrer les paramètres'))) return;
-        s.societe = Object.assign({}, s.societe, ff.read());
+        const societe = Object.assign({}, s.societe, ff.read());
+        delete societe.siret;
+        delete societe.tva;
+        delete societe.iban;
+        s.societe = societe;
+        s.banniere = Object.assign({}, s.banniere, bannerFF.read());
         Object.assign(s, defaults.read(), mentions.read());
         App.db.persist();
         App.toast('Paramètres enregistrés.');

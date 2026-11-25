@@ -1,5 +1,5 @@
 /* =========================================================
-   ChantierPro — stockage local, données de démonstration, calculs
+   ChantierPro — SOSMAJED — stockage local, données de démonstration, calculs
    ========================================================= */
 (function () {
   'use strict';
@@ -7,7 +7,7 @@
   const { uid, n, sum, addDays, todayISO, monthYear } = App;
 
   const KEY = 'chantierpro_web_v1';
-  const STORE_VERSION = 6;
+  const STORE_VERSION = 7;
   const COLLECTIONS = ['chantiers', 'taches', 'avancements', 'fournisseurs', 'articles', 'mouvements', 'devis', 'commandes', 'sousTraitants', 'situations', 'decomptes', 'documents', 'personnel', 'essaisBeton'];
 
   const DEFAULT_DOC_RUBRIQUES = ['Bureau d\'étude', 'Topographe', 'Laboratoire', 'Divers', 'Maître d\'ouvrage'];
@@ -28,17 +28,15 @@
   function defaultSettings() {
     return {
       societe: {
-        nom: 'BTP Constructions Majed',
-        adresse: '12 rue des Bâtisseurs',
-        cp: '75011',
-        ville: 'Paris',
+        nom: 'SOSMAJED',
+        adresse: 'Lot N°31, Lotissement Kamilia',
+        cp: '20000',
+        ville: 'Casablanca',
         tel: '01 23 45 67 89',
-        email: 'contact@btp-majed.fr',
-        siret: '812 345 678 00021',
-        tva: 'FR 12 812345678',
-        iban: 'FR76 1234 5678 9012 3456 7890 123',
+        email: 'contact@sosmajed.com',
         logo: defaultLogo()
       },
+      banniere: { actif: true, texte: 'SOSMAJED — Gestion de chantier BTP', image: null },
       tvaDefaut: 20,
       retenueGarantie: 5,
       docRubriques: defaultDocRubriques(),
@@ -56,7 +54,7 @@
     return [
       {
         id: 'pers1', nom: 'Karim Benali', fonction: 'Conducteur de travaux', categorie: 'Équipe interne',
-        tel: '06 12 34 56 78', tel2: '01 23 45 67 89', email: 'karim.benali@btp-majed.fr',
+        tel: '06 12 34 56 78', tel2: '01 23 45 67 89', email: 'karim.benali@sosmajed.com',
         adresse: '12 rue des Bâtisseurs', cp: '75011', ville: 'Paris',
         chantierId: 'ch_cedres', statut: 'Actif', contrat: 'CDI', dateEmbauche: A(-1250),
         urgenceNom: 'Leïla Benali (épouse)', urgenceTel: '06 98 76 54 32',
@@ -64,7 +62,7 @@
       },
       {
         id: 'pers2', nom: 'Sophie Martin', fonction: 'Chef de chantier', categorie: 'Équipe interne',
-        tel: '06 23 45 67 89', tel2: '', email: 'sophie.martin@btp-majed.fr',
+        tel: '06 23 45 67 89', tel2: '', email: 'sophie.martin@sosmajed.com',
         adresse: '4 allée des Peupliers', cp: '44300', ville: 'Nantes',
         chantierId: 'ch_ecole', statut: 'Actif', contrat: 'CDI', dateEmbauche: A(-820),
         urgenceNom: 'Paul Martin (père)', urgenceTel: '06 11 22 33 44',
@@ -72,7 +70,7 @@
       },
       {
         id: 'pers3', nom: 'Ahmed El Fassi', fonction: 'Chef d\'équipe maçonnerie', categorie: 'Équipe interne',
-        tel: '06 34 56 78 90', tel2: '', email: 'ahmed.elfassi@btp-majed.fr',
+        tel: '06 34 56 78 90', tel2: '', email: 'ahmed.elfassi@sosmajed.com',
         adresse: '28 rue de la Gare', cp: '93100', ville: 'Montreuil',
         chantierId: 'ch_mairie', statut: 'Actif', contrat: 'CDI', dateEmbauche: A(-1520),
         urgenceNom: 'Nadia El Fassi (épouse)', urgenceTel: '06 55 66 77 88',
@@ -80,7 +78,7 @@
       },
       {
         id: 'pers4', nom: 'Julien Moreau', fonction: 'Grutier', categorie: 'Équipe interne',
-        tel: '06 45 67 89 01', tel2: '', email: 'julien.moreau@btp-majed.fr',
+        tel: '06 45 67 89 01', tel2: '', email: 'julien.moreau@sosmajed.com',
         adresse: '7 rue des Lilas', cp: '75020', ville: 'Paris',
         chantierId: 'ch_cedres', statut: 'En congé', contrat: 'Intérim', dateEmbauche: A(-210),
         urgenceNom: 'Marie Moreau (mère)', urgenceTel: '06 77 88 99 00',
@@ -88,7 +86,7 @@
       },
       {
         id: 'pers5', nom: 'Claire Dubois', fonction: 'Assistante de direction', categorie: 'Équipe interne',
-        tel: '01 23 45 67 90', tel2: '', email: 'claire.dubois@btp-majed.fr',
+        tel: '01 23 45 67 90', tel2: '', email: 'claire.dubois@sosmajed.com',
         adresse: '12 rue des Bâtisseurs', cp: '75011', ville: 'Paris',
         chantierId: '', statut: 'Actif', contrat: 'CDI', dateEmbauche: A(-1900),
         urgenceNom: 'Luc Dubois (frère)', urgenceTel: '06 12 98 76 54',
@@ -177,6 +175,34 @@
     if (!data || typeof data !== 'object') return data;
     if (!data.settings) data.settings = defaultSettings();
     if (!data.settings.societe) data.settings.societe = defaultSettings().societe;
+    /* Raison sociale : remplace l'ancien nom par defaut sans ecraser une saisie personnalisee. */
+    if (data.settings.societe) {
+      const raisonSociale = String(data.settings.societe.nom || '').trim();
+      if (!raisonSociale || raisonSociale === 'BTP Constructions Majed' || raisonSociale === 'JawadProjet') {
+        data.settings.societe.nom = 'SOSMAJED';
+      }
+      /* Ancienne adresse de demonstration : remplacee, sans toucher a une adresse saisie. */
+      if (String(data.settings.societe.adresse || '').trim() === '12 rue des Bâtisseurs') {
+        data.settings.societe.adresse = 'Lot N°31, Lotissement Kamilia';
+      }
+      if (String(data.settings.societe.cp || '').trim() === '75011') data.settings.societe.cp = '20000';
+      if (String(data.settings.societe.ville || '').trim() === 'Paris') data.settings.societe.ville = 'Casablanca';
+      if (String(data.settings.societe.email || '').trim() === 'contact@btp-majed.fr') {
+        data.settings.societe.email = 'contact@sosmajed.com';
+      }
+      /* Identité simplifiée : ces numéros ne sont plus utilisés ni imprimés. */
+      delete data.settings.societe.siret;
+      delete data.settings.societe.tva;
+      delete data.settings.societe.iban;
+    }
+    /* Bannière de tête de page : ajoutée sans écraser les réglages existants. */
+    if (!data.settings.banniere || typeof data.settings.banniere !== 'object') {
+      data.settings.banniere = defaultSettings().banniere;
+    } else {
+      if (data.settings.banniere.actif == null) data.settings.banniere.actif = true;
+      if (data.settings.banniere.texte == null) data.settings.banniere.texte = 'SOSMAJED — Gestion de chantier BTP';
+      if (!('image' in data.settings.banniere)) data.settings.banniere.image = null;
+    }
     if (!Array.isArray(data.settings.docRubriques) || !data.settings.docRubriques.length) {
       data.settings.docRubriques = defaultDocRubriques();
     }
@@ -213,6 +239,7 @@
     if (!data.version || data.version < 4) data.version = 4;
     if (!data.version || data.version < 5) data.version = 5;
     if (!data.version || data.version < 6) data.version = 6;
+    if (!data.version || data.version < 7) data.version = 7;
     return data;
   }
 
@@ -859,7 +886,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'chantierpro-sauvegarde-' + todayISO() + '.json';
+    a.download = 'sosmajed-sauvegarde-' + todayISO() + '.json';
     document.body.appendChild(a);
     a.click();
     a.remove();

@@ -1,5 +1,5 @@
 /* =========================================================
-   ChantierPro — verrouillage par mot de passe
+   ChantierPro — SOSMAJED — verrouillage par mot de passe
    (protection locale de l'interface, sans serveur)
    ========================================================= */
 (function () {
@@ -282,7 +282,7 @@
     screen.innerHTML =
       '<form class="lock-card" autocomplete="off">' +
         '<div class="lock-logo' + (hasLogo ? ' has-image' : '') + '">' + logo + '</div>' +
-        '<h1>' + esc(societe.nom || 'ChantierPro') + '</h1>' +
+        '<h1>' + esc(societe.nom || 'SOSMAJED') + '</h1>' +
         '<p class="lock-sub">Site protégé. Saisissez votre nom d\'utilisateur et votre mot de passe pour accéder à vos données.</p>' +
         '<div class="lock-field">' +
           '<label for="lockUser">Nom d\'utilisateur</label>' +

@@ -1,5 +1,5 @@
 /* =========================================================
-   ChantierPro — devis et décomptes clients
+   ChantierPro — SOSMAJED — devis et décomptes clients
    ========================================================= */
 (function () {
   'use strict';

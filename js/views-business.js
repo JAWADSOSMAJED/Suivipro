@@ -1,5 +1,5 @@
 /* =========================================================
-   ChantierPro — fournisseurs, stock, commandes, documents
+   ChantierPro — SOSMAJED — fournisseurs, stock, commandes, documents
    ========================================================= */
 (function () {
   'use strict';

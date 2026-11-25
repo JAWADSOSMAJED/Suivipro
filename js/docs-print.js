@@ -1,5 +1,5 @@
 /* =========================================================
-   ChantierPro — documents imprimables (devis, BC, décomptes…)
+   ChantierPro — SOSMAJED — documents imprimables (devis, BC, décomptes…)
    ========================================================= */
 (function () {
   'use strict';
@@ -23,8 +23,7 @@
       esc(s.adresse || '') + '<br>' +
       esc((s.cp || '') + ' ' + (s.ville || '')) + '<br>' +
       (s.tel ? 'Tél. ' + esc(s.tel) + '<br>' : '') +
-      (s.email ? esc(s.email) + '<br>' : '') +
-      (s.siret ? 'SIRET ' + esc(s.siret) + ' — TVA ' + esc(s.tva || '') : '') + '</p></div>';
+      (s.email ? esc(s.email) + '<br>' : '') + '</p></div>';
   }
 
   function docHead(label, numero, date, extra, chantier) {
@@ -498,8 +497,7 @@
     const rows = [
       ['Raison sociale', e.nom], ['Adresse', e.adresse],
       ['Code postal / ville', (e.cp || '') + (e.cp || e.ville ? ' ' : '') + (e.ville || '')],
-      ['Téléphone', e.tel], ['Email', e.email], ['SIRET', e.siret],
-      ['N° TVA intracommunautaire', e.tva], ['IBAN', e.iban]
+      ['Téléphone', e.tel], ['Email', e.email]
     ].filter(function (r) { return String(r[1] || '').trim(); }).map(function (r) {
       return '<tr><td><strong>' + esc(r[0]) + '</strong></td><td>' + esc(String(r[1])) + '</td></tr>';
     }).join('') || '<tr><td colspan="2">Identité non renseignée</td></tr>';
