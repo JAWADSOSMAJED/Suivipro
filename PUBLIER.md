@@ -6,11 +6,11 @@
 > - Mot de passe provisoire : `My-Drop-Site`
 > - Deploye le 16/11/2026 a 13:30 UTC - `site_id` `59f1128c-f570-4eb8-97c3-1f2a4fbf813b`
 > - **Site hors ligne** : l'adresse ci-dessus renvoie une erreur **503** (deploiement anonyme
->   supprime). Le ZIP du Bureau est en **1.4.7** : connexion par nom d'utilisateur et mot de
+>   supprime). Le ZIP du Bureau est en **1.4.8** : connexion par nom d'utilisateur et mot de
 >   passe, impression sur tous les onglets, sous-onglets *Stock & fournitures* par famille de
 >   materiaux, **bon de livraison et date de livraison** sur chaque article et chaque entree de stock, fiche chantier
 >   avec tranche, GH, nombre d'immeubles, type d'immeuble, appartements et magasins, rapport
->   recapitulatif des essais beton, remise a zero des donnees saisies, suppression des derniers mouvements du tableau de bord, planning separe par tranche, raison sociale SOSMAJED (Lot N°31, Lotissement Kamilia, 20000 Casablanca, contact@sosmajed.com). Republier sur un nouveau projet (Cloudflare Pages
+>   recapitulatif des essais beton, remise a zero des donnees saisies, suppression des derniers mouvements du tableau de bord, planning separe par tranche, raison sociale SOSMAJED (Lot N°31, Lotissement Kamilia, 20000 Casablanca, contact@sosmajed.com, banniere modifiable en tete de page, rapport quotidien imprimable. Republier sur un nouveau projet (Cloudflare Pages
 >   conseille, voir Option 1).
 > - **A reclamer avant 14:30 UTC (15:30 heure locale)**, sinon Netlify supprime le site.
 > - Lien de reclamation (usage unique) :

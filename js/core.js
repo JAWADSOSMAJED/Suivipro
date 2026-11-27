@@ -6,7 +6,7 @@
   'use strict';
 
   const App = (window.App = window.App || {});
-  App.version = '1.4.7';
+  App.version = '1.4.8';
   App.entities = {};
   App.views = {};
   App.entity = function (key, def) { App.entities[key] = def; };

@@ -11,6 +11,7 @@
       { route: 'dashboard', label: 'Tableau de bord', icon: 'home' },
       { route: 'chantiers', label: 'Chantiers', icon: 'hammer' },
       { route: 'planning', label: 'Planning', icon: 'calendar' },
+      { route: 'rapportQuotidien', label: 'Rapport quotidien', icon: 'file' },
       { route: 'avancement', label: 'Avancement', icon: 'chart' }
     ] },
     { label: 'Achats & stock', items: [

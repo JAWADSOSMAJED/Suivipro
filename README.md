@@ -50,6 +50,7 @@ puis ouvrir <http://localhost:8765>.
 | **Tableau de bord** | KPI de l'activité, chantiers en cours, alertes stock/planning, prochaines échéances |
 | **Chantiers** | Créer, modifier, supprimer un chantier ; **tranche** et **GH**, **programme** (nombre d'immeubles, type d'immeuble, nombre d'appartements et de magasins) ; fiche détaillée avec budget, avancement, devis, achats, décomptes et documents |
 | **Planning** | **Un planning distinct par tranche** (T1, T2…), chacun avec son Gantt, son bouton « Imprimer la tranche » et son bouton « Nouvelle tâche » ; filtres par statut ; tranche renseignée automatiquement depuis le chantier |
+| **Rapport quotidien** | Journal de chantier par date : chantier, responsable, effectif, heures, météo, travaux réalisés, main-d’œuvre, matériel, livraisons, incidents et observations ; statut Brouillon/Validé, recherche, tri, **impression d’un rapport ou de l’historique complet** |
 | **Avancement** | Lots pondérés modifiables en direct (curseur ou saisie), avancement global recalculé, journal de suivi |
 | **Personnel** | Annuaire complet des contacts : fonction, catégorie, téléphones et email cliquables, adresse, chantier d'affectation, statut, contrat, date d'embauche, contact d'urgence et notes |
 | **Fournisseurs** | Carnet d'adresses complet (contacts, coordonnées, spécialités, notes) |
@@ -86,6 +87,14 @@ tranche** et son bouton **Nouvelle tâche**. Les tâches héritent de la tranche
 choisi ; le champ **Tranche** du formulaire permet de l'ajuster. Les tâches sans tranche
 sont regroupées en fin de page sous « Sans tranche ». L'impression globale (**Imprimer**)
 reste disponible et le document imprimé comporte une colonne **Tranche**.
+
+L'onglet **Rapport quotidien** constitue le journal de chantier. Chaque rapport est daté et
+rattaché à un chantier ; il consigne le responsable, l'effectif, les heures travaillées, la
+météo, les travaux réalisés, les équipes, le matériel, les livraisons, les incidents et les
+observations. Le statut **Brouillon / Validé** permet de distinguer les rapports finalisés.
+La liste propose la recherche, le tri et deux impressions : **Imprimer le rapport**
+(historique filtré selon le chantier sélectionné) ou **Imprimer ce rapport** depuis les
+actions d'une ligne. Les Rapports quotidiens font partie de la sauvegarde JSON.
 
 La page **Stock & fournitures** est organisée en **sous-onglets par famille de
 matériaux** : *Ciment*, *Tout-venant*, *Briques*, *Treillis soudé*, *Sable* et *Divers*.
@@ -283,7 +292,7 @@ Compatible avec les navigateurs récents (Chrome, Edge, Firefox).
 
 ---
 
-Version 1.4.7 — ChantierPro · SOSMAJED · Gestion de chantier BTP
+Version 1.4.8 — ChantierPro · SOSMAJED · Gestion de chantier BTP
 
 
 ---

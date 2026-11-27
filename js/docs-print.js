@@ -634,4 +634,124 @@
 
     App.printHTML('Rapport essais béton', html);
   };
+
+  /* ---------------- Rapports quotidiens (journaux de chantier) ---------------- */
+  function texteDoc(v) {
+    const s = String(v || '').trim();
+    return s ? esc(s).replace(/\n/g, '<br>') : '<span style="color:#777">—</span>';
+  }
+
+  function extraitDoc(v, max) {
+    const s = String(v || '').replace(/\s+/g, ' ').trim();
+    return s.length > max ? s.slice(0, max).trim() + '…' : s;
+  }
+
+  function champDoc(label, value) {
+    return '<p><strong>' + esc(label) + ' :</strong> ' + texteDoc(value) + '</p>';
+  }
+
+  function rapportDetail(r, withTitle) {
+    const ch = App.db.find('chantiers', r.chantierId);
+    return (withTitle
+      ? '<div class="doc-title">Rapport du ' + fmtDate(r.date) + (r.reference ? ' — ' + esc(r.reference) : '') + '</div>'
+      : '') +
+      '<div class="party">' +
+        '<h4>Chantier & encadrement</h4>' +
+        champDoc('Chantier', ch ? App.chantierLabel(ch.id) : '') +
+        champDoc('Responsable', r.responsable) +
+        champDoc('Statut', r.statut) +
+        champDoc('Effectif', r.effectif ? num(r.effectif) + ' personne' + (n(r.effectif) > 1 ? 's' : '') : '') +
+        champDoc('Heures travaillées', r.heures ? num(r.heures) + ' h' : '') +
+        champDoc('Météo', r.meteo) +
+        champDoc('Température', r.temperature ? num(r.temperature) + ' °C' : '') +
+      '</div>' +
+      '<div class="party">' +
+        '<h4>Travaux réalisés</h4>' + texteDoc(r.travaux) +
+      '</div>' +
+      '<div class="party">' +
+        '<h4>Main-d’œuvre, matériel et livraisons</h4>' +
+        champDoc('Main-d’œuvre', r.mainOeuvre) +
+        champDoc('Matériel', r.materiel) +
+        champDoc('Livraisons', r.livraisons) +
+      '</div>' +
+      '<div class="party">' +
+        '<h4>Incidents & observations</h4>' +
+        champDoc('Incidents / retards', r.incidents) +
+        champDoc('Observations', r.observations) +
+      '</div>';
+  }
+
+  App.printRapportQuotidien = function (id) {
+    const r = App.db.find('rapportsQuotidien', id);
+    if (!r) {
+      App.toast('Rapport quotidien introuvable.', 'err');
+      return;
+    }
+    const ch = App.db.find('chantiers', r.chantierId);
+    const html = docHead('RAPPORT QUOTIDIEN', r.reference || fmtDate(r.date), r.date,
+      r.statut ? 'Statut : ' + esc(r.statut) : null, ch) +
+      '<div class="kpi-doc">' +
+        '<div><span>Effectif</span><b>' + (r.effectif ? num(r.effectif) : '—') + '</b></div>' +
+        '<div><span>Heures</span><b>' + (r.heures ? num(r.heures) + ' h' : '—') + '</b></div>' +
+        '<div><span>Météo</span><b>' + esc(r.meteo || '—') + '</b></div>' +
+        '<div><span>Incident</span><b>' + (String(r.incidents || '').trim() ? 'Oui' : 'Non') + '</b></div>' +
+      '</div>' +
+      rapportDetail(r, false) +
+      '<div class="sign"><div>Responsable de chantier</div><div>Visa maître d’ouvrage</div></div>' +
+      '<div class="notes">Document généré le ' + fmtDate(App.todayISO()) + ' — ' + esc(soc().nom) +
+        '. Données indicatives à vérifier avant diffusion.</div>';
+    App.printHTML('Rapport quotidien — ' + (r.reference || fmtDate(r.date)), html);
+  };
+
+  App.printRapportsQuotidien = function () {
+    const chId = App.state && App.state.chantierId;
+    const filtre = chId && chId !== 'all';
+    const all = App.db.get('rapportsQuotidien') || [];
+    const rows = (filtre ? all.filter(function (r) { return r.chantierId === chId; }) : all.slice())
+      .sort(function (a, b) { return String(b.date || '').localeCompare(String(a.date || '')); });
+    if (!rows.length) {
+      App.toast('Aucun rapport quotidien à imprimer pour cette sélection.', 'err');
+      return;
+    }
+    const dates = rows.map(function (r) { return r.date; }).filter(Boolean).sort();
+    const periode = dates.length
+      ? 'Période : du ' + fmtDate(dates[0]) + ' au ' + fmtDate(dates[dates.length - 1])
+      : '';
+    const chantier = filtre ? App.db.find('chantiers', chId) : null;
+    const incidents = rows.filter(function (r) { return String(r.incidents || '').trim(); }).length;
+    const valides = rows.filter(function (r) { return r.statut === 'Validé'; }).length;
+
+    const lines = rows.map(function (r) {
+      return '<tr>' +
+        '<td>' + (r.date ? fmtDate(r.date) : '—') +
+          (r.reference ? '<br><span style="color:#777">' + esc(r.reference) + '</span>' : '') + '</td>' +
+        '<td>' + esc(r.chantierId ? App.chantierLabel(r.chantierId) : '—') + '</td>' +
+        '<td>' + esc(r.responsable || '—') + '</td>' +
+        '<td>' + esc(extraitDoc(r.travaux, 140)) + '</td>' +
+        '<td class="r">' + (r.effectif ? num(r.effectif) : '—') + '</td>' +
+        '<td class="r">' + (r.heures ? num(r.heures) + ' h' : '—') + '</td>' +
+        '<td>' + esc(r.meteo || '—') + '</td>' +
+        '<td>' + esc(r.statut || '—') + '</td>' +
+        '</tr>';
+    }).join('');
+
+    const html = docHead('RAPPORTS QUOTIDIENS', rows.length + ' rapport' + (rows.length > 1 ? 's' : ''),
+      App.todayISO(), periode, chantier) +
+      '<div class="kpi-doc">' +
+        '<div><span>Rapports</span><b>' + rows.length + '</b></div>' +
+        '<div><span>Validés</span><b>' + valides + '</b></div>' +
+        '<div><span>Avec incident</span><b>' + incidents + '</b></div>' +
+      '</div>' +
+      '<div class="doc-title">Historique (' + rows.length + ')</div>' +
+      '<table class="lines compact"><thead><tr>' +
+        '<th>Date</th><th>Chantier</th><th>Responsable</th><th>Travaux</th>' +
+        '<th class="r">Effectif</th><th class="r">Heures</th><th>Météo</th><th>Statut</th>' +
+      '</tr></thead><tbody>' + lines + '</tbody></table>' +
+      rows.map(function (r) { return rapportDetail(r, true); }).join('') +
+      '<div class="sign"><div>Visa entreprise</div><div>Visa maître d’ouvrage</div></div>' +
+      '<div class="notes">Document généré le ' + fmtDate(App.todayISO()) + ' — ' + esc(soc().nom) +
+        '. Données indicatives à vérifier avant diffusion.</div>';
+
+    App.printHTML('Rapports quotidiens', html, { landscape: true });
+  };
 })();

@@ -7,8 +7,8 @@
   const { uid, n, sum, addDays, todayISO, monthYear } = App;
 
   const KEY = 'chantierpro_web_v1';
-  const STORE_VERSION = 7;
-  const COLLECTIONS = ['chantiers', 'taches', 'avancements', 'fournisseurs', 'articles', 'mouvements', 'devis', 'commandes', 'sousTraitants', 'situations', 'decomptes', 'documents', 'personnel', 'essaisBeton'];
+  const STORE_VERSION = 8;
+  const COLLECTIONS = ['chantiers', 'taches', 'avancements', 'fournisseurs', 'articles', 'mouvements', 'devis', 'commandes', 'sousTraitants', 'situations', 'decomptes', 'documents', 'personnel', 'essaisBeton', 'rapportsQuotidien'];
 
   const DEFAULT_DOC_RUBRIQUES = ['Bureau d\'étude', 'Topographe', 'Laboratoire', 'Divers', 'Maître d\'ouvrage'];
   const DEFAULT_STOCK_FAMILLES = ['Ciment', 'Tout-venant', 'Briques', 'Treillis soudé', 'Sable', 'Divers'];
@@ -150,7 +150,47 @@
     ];
   }
 
-  /* Mise à niveau des données existantes (v1 → v2 : logo ; v3 : sous-onglets documentaires ; v4 : personnel ; v5 : essais béton). */
+  /* Journaux de chantier : comptes rendus quotidiens. */
+  function demoRapportsQuotidien() {
+    const A = (d) => addDays(todayISO(), d);
+    return [
+      {
+        id: 'rq1', date: A(-1), chantierId: 'ch_cedres', reference: 'RQ-' + new Date().getFullYear() + '-0148',
+        responsable: 'Karim Benali', effectif: 14, heures: 98, meteo: 'Ensoleillé', temperature: 24,
+        travaux: 'Coulage des voiles R+1 (zone nord) et poses des réservations sanitaires. Dépose des coffrages de la zone sud.',
+        mainOeuvre: '12 maçons, 1 chef de chantier, 1 manœuvre. Équipe Élec\'Pro présente en matinée (2 personnes).',
+        materiel: '1 pompe à béton, 2 vibrateurs, 1 nacelle élévatrice.',
+        livraisons: 'Camion-toupie C25/30 (8 m³) reçu à 07h45 — BL n°2481.',
+        incidents: 'Aucun incident à signaler.',
+        statut: 'Validé',
+        observations: 'Météo favorable, production conforme au planning.'
+      },
+      {
+        id: 'rq2', date: A(-2), chantierId: 'ch_ecole', reference: 'RQ-' + new Date().getFullYear() + '-0147',
+        responsable: 'Sophie Martin', effectif: 9, heures: 63, meteo: 'Pluvieux', temperature: 17,
+        travaux: 'Terrassement de la cour et mise en place du géotextile sous dalle.',
+        mainOeuvre: '7 terrassiers, 1 conducteur d\'engin, 1 chef de chantier.',
+        materiel: '1 pelle mécanique, 1 plaque vibrante.',
+        livraisons: 'Livraison de tout-venant (12 t) — BL n°1193.',
+        incidents: 'Arrêt de 1h30 en raison de la pluie. Aucun dégât constaté.',
+        statut: 'Validé',
+        observations: 'Reprise du terrassement prévue le lendemain matin.'
+      },
+      {
+        id: 'rq3', date: A(-3), chantierId: 'ch_mairie', reference: 'RQ-' + new Date().getFullYear() + '-0146',
+        responsable: 'Ahmed El Fassi', effectif: 6, heures: 42, meteo: 'Nuageux', temperature: 20,
+        travaux: 'Dépose des menuiseries existantes et protection des ouvertures.',
+        mainOeuvre: '4 menuisiers, 1 manœuvre, 1 responsable.',
+        materiel: '1 échafaudage roulant, 2 perceuses.',
+        livraisons: 'Aucune livraison.',
+        incidents: '',
+        statut: 'Brouillon',
+        observations: 'Attente de la validation du relevé pour reprise des gros œuvres.'
+      }
+    ];
+  }
+
+  /* Mise à niveau des données existantes (v1 → v2 : logo ; v3 : sous-onglets documentaires ; v4 : personnel ; v5 : essais béton ; v8 : rapports quotidiens). */
   function guessDocRubrique(cat) {
     switch (cat) {
       case 'Contrat': return 'Maître d\'ouvrage';
@@ -235,11 +275,13 @@
     }
     if (!Array.isArray(data.personnel)) data.personnel = demoPersonnel();
     if (!Array.isArray(data.essaisBeton)) data.essaisBeton = [];
+    if (!Array.isArray(data.rapportsQuotidien)) data.rapportsQuotidien = [];
     if (!data.version || data.version < 3) data.version = 3;
     if (!data.version || data.version < 4) data.version = 4;
     if (!data.version || data.version < 5) data.version = 5;
     if (!data.version || data.version < 6) data.version = 6;
     if (!data.version || data.version < 7) data.version = 7;
+    if (!data.version || data.version < 8) data.version = 8;
     return data;
   }
 
@@ -554,7 +596,8 @@
       decomptes: decomptes,
       documents: documents,
       personnel: personnel,
-      essaisBeton: demoEssaisBeton()
+      essaisBeton: demoEssaisBeton(),
+      rapportsQuotidien: demoRapportsQuotidien()
     };
   }
 
@@ -717,6 +760,7 @@
       case 'situations': return (row.numero || '') + (row.sousTraitantId ? ' — ' + App.labelFor('sousTraitants', row.sousTraitantId) : '');
       case 'decomptes': return (row.numero || '') + (row.client ? ' — ' + row.client : '');
       case 'essaisBeton': return (row.reference || '') + (row.typeBeton ? (row.reference ? ' — ' : '') + row.typeBeton : '');
+      case 'rapportsQuotidien': return (row.date ? fmtDate(row.date) : '') + (row.reference ? ' — ' + row.reference : '') + (row.chantierId ? ' — ' + App.chantierLabel(row.chantierId) : '');
       default: return row.nom || row.numero || row.designation || row.id;
     }
   };
@@ -904,6 +948,7 @@
           const sec = db.data && db.data.security;
           if (!Array.isArray(obj.personnel)) obj.personnel = [];
           if (!Array.isArray(obj.essaisBeton)) obj.essaisBeton = [];
+          if (!Array.isArray(obj.rapportsQuotidien)) obj.rapportsQuotidien = [];
           db.data = migrate(obj);
           delete db.data.security; /* on conserve le verrouillage de ce navigateur */
           if (sec) db.data.security = sec;
